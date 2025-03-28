@@ -50,6 +50,7 @@ function mostrarPosicao(posicao){
     Longitude: ${longitude}<br>
     <a href="https://www.google.com.br/maps/@${latitude},${longitude},20z?entry=ttu" target='_blank'><h4> Ver no Google Maps</h4></a>
     `
+    atualizaMapa(latitude, longitude)
 }
 
 
@@ -65,20 +66,21 @@ async function buscarEndereco() {
 
 
     try {
+        // Monta a URL com as coordenadas obtidas
+        const url = `https://nominatim.openstreetmap.org/reverse?format=json&lat=${latitude}&lon=${longitude}&accept-language=pt-br`;
 
-        const ur = `https://nominatim.openstreetmap.org/reverse?format=json&lat=${latitude}&lon=${longitude}&accept-language=pt-br`;
-
-
+        // Chama a API e espera pela resposta
         const resposta = await fetch(url);
 
-
+        // Transforma a resposta em JSON
         const dados = await resposta.json();
         console.log(dados);
 
-
+        // Extrai as informações de endereço para a variável endereco
         const endereco = dados.address;
         console.log(endereco);
 
+        // Exibe o endereço formatado
         resultado2.innerHTML = `
     <h3>📍 Detalhes do endereço:</h3>
     País: ${endereco.country || "N/A"}<br>
@@ -90,7 +92,7 @@ async function buscarEndereco() {
     <a href="https://www.openstreetmap.org/?mlat=${latitude}&mlon=${longitude}" target="_blank">
         <h4>🌍 Ver no OpenStreetMap</h4>
     </a>
-     `;
+`;
 
 
     } catch (erro) {
@@ -105,3 +107,12 @@ let mapa = L.map('mapa').setView([-23.9828992, -48.8669184], 10);
 L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
     attribution: '&copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a>'
 }).addTo(mapa);
+
+function atualizaMapa(latitude,longitude){
+
+    mapa.setView([latitude, longitude],19);
+    L.marker([latitude,longitude])
+        .addTo(mapa)
+        .bindPopup("📍 Você está aqui")
+        .openPopup();
+}
