@@ -58,15 +58,17 @@ async function buscarEndereco() {
 
     if (latitude === null || longitude === null) {
         resultado2.innerHTML = "⚠️ Primeiro obtenha as coordenadas!";
+        console.log(latitude, longitude)
         return;
+        
     }
 
 
     try {
 
-        const url = `https://nominatim.openstreetmap.org/reverse?format=json&lat=${latitude}&lon=${longitude}&accept-language=pt-br`;
+        const ur = `https://nominatim.openstreetmap.org/reverse?format=json&lat=${latitude}&lon=${longitude}&accept-language=pt-br`;
 
-a
+
         const resposta = await fetch(url);
 
 
@@ -88,7 +90,7 @@ a
     <a href="https://www.openstreetmap.org/?mlat=${latitude}&mlon=${longitude}" target="_blank">
         <h4>🌍 Ver no OpenStreetMap</h4>
     </a>
-`;
+     `;
 
 
     } catch (erro) {
